@@ -8,6 +8,7 @@ App.Router.map(function() {
 App.IndexController = Ember.ArrayController.extend(Ember.LoadMoreMixin,{
   perPage: parseInt($.QueryString['limit']) ? parseInt($.QueryString['limit']) : 1,
   offset: parseInt($.QueryString["offset"]) ? parseInt($.QueryString['offset']) : 0,
+  buttonText: 'Load More Content'
 });
 
 App.IndexRoute = Ember.Route.extend({
@@ -30,7 +31,7 @@ Ember.Handlebars.registerBoundHelper('easyFormat', function(time){
 App.IndexView = Ember.View.extend(Ember.LoadmoreViewMixin, {
    needs:['controller'],
    didInsertElement: function() {
-      this._super; 
+      this._super;
       Ember.run.scheduleOnce('afterRender', this, 'fireDOMElements');
    },
    willDestroyElement: function(){
@@ -38,7 +39,23 @@ App.IndexView = Ember.View.extend(Ember.LoadmoreViewMixin, {
    },
    fireDOMElements: function() {
       this.setupLoadMoreListener();
+      if (this.inViewport()) {
+        var controller = this.get('controller'),
+        t = this,
+        interval = setInterval(function(){
+          controller.send('loadMore');
+          if (!t.inViewport()) {
+           clearInterval(interval);
+          }
+        },500, t, controller, interval);
+      }
    }
 });
+
+
+
+
+
+
 
 

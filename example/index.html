@@ -26,8 +26,11 @@
       {{/each}}
     </div>
     <div class="clearfix"></div>
-    <button class="btn btn-primary btn-large btn-block" {{bind-attr disabled=hasMore}} {{action "loadMore" target="controller"}}><i class="glyphicon glyphicon-refresh"></i> Load some More Content</button>
+    <button class="btn btn-primary btn-large btn-block loadMore" {{bind-attr disabled=hasMore}} {{action "loadMore" target="controller"}}><i class="glyphicon glyphicon-refresh"></i> Load some More Content</button>
+    
   </script>
+
+  
 
   <script src="js/libs/jquery-1.10.2.js"></script>
   <script src="js/libs/bootstrap.min.js"></script>
