@@ -26,7 +26,10 @@
       {{/each}}
     </div>
     <div class="clearfix"></div>
-    <button class="btn btn-primary btn-large btn-block loadMore" {{bind-attr disabled=hasMore}} {{action "loadMore" target="controller"}}><i class="glyphicon glyphicon-refresh"></i> Load some More Content</button>
+    {{#if countDown}}
+      <div class="col-md-12 well text-center"><h3>Fetching <span class="text-success">{{perPage}}</span> more item{{#if moreThanOne}}s{{/if}} in <strong class="text-info">{{counter}}</strong></h3></div>
+    {{/if}}
+    <button class="btn btn-primary btn-large btn-block loadMore" {{bind-attr disabled=hasMore}} {{action "loadMore" target="controller"}}><i class="glyphicon glyphicon-refresh loadMore"></i> Load some More Content</button>
     
   </script>
 

@@ -13,6 +13,11 @@ Ember.LoadMoreMixin = Ember.Mixin.create({
       return this.get('totalCount') <= this.get('end'); 
    }.property('totalCount', 'end'),
    loadingMore: false,
+   counter: 5,
+   countDown: false,
+   moreThanOne: function() {
+      return this.get('perPage') > 1;
+   }.property('perPage'),
    updatedContent: function (){
       var models = this.get('content'),
       slice,
@@ -53,12 +58,26 @@ Ember.LoadmoreViewMixin = Ember.Mixin.create( {
      controller = this.get('controller');
      return controller.get('isLoading');
    },
+   toggleLoading: function() {
+      var t = this,
+      controller = t.get('controller'),
+      interval = null;
+      if (t.inViewport() && !controller.get('countDown')) {
+        controller.set('countDown', true);
+        interval = setInterval(function(){
+          var count = controller.get('counter') - 1;
+          controller.set('counter', count);
+          if ((count ) < 1) {
+              controller.setProperties({'counter':5, 'countDown' : false});
+              controller.send('loadMore');
+              clearInterval(interval);
+          }
+        },1000, t, controller, interval);
+      }
+   }.observes('controller.updatedContent'),
    fireScroll: function() {
       if (this.inViewport() === true && !this.disabled() && !this.isLoading()) {
-         var controller = this.get('controller');
-         setTimeout(function() {
-            controller.send('loadMore');
-         }, 1000);
+        this.toggleLoading();
       }else if (this.disabled()) {
          this.destroyLoadMoreListener();
       }

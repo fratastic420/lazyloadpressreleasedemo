@@ -39,16 +39,7 @@ App.IndexView = Ember.View.extend(Ember.LoadmoreViewMixin, {
    },
    fireDOMElements: function() {
       this.setupLoadMoreListener();
-      if (this.inViewport()) {
-        var controller = this.get('controller'),
-        t = this,
-        interval = setInterval(function(){
-          controller.send('loadMore');
-          if (!t.inViewport()) {
-           clearInterval(interval);
-          }
-        },500, t, controller, interval);
-      }
+      this.toggleLoading();
    }
 });
 
